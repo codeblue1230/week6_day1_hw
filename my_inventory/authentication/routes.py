@@ -1,13 +1,14 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from my_inventory.forms import UserLoginForm
-from my_inventory.models import User, db
+from my_inventory.models import User, db, check_password_hash
+from flask_login import login_user, logout_user, current_user, login_required
 
 
 auth = Blueprint('authentication', __name__, template_folder='auth')
 
 
-@auth.route('/auth', methods = ['GET', 'POST'])
-def home():
+@auth.route('/signup', methods = ['GET', 'POST'])
+def signup():
     userform = UserLoginForm()
 
     try:
@@ -31,3 +32,37 @@ def home():
         raise Exception('Invalid Form Data. Please Check your form')
     
     return render_template('signup.html', form=userform)
+
+
+@auth.route('/signin', methods = ['GET', 'POST'])
+def signin():
+    userform = UserLoginForm()
+
+
+    try:
+        if request.method == "POST" and userform.validate_on_submit():
+            email = userform.email.data
+            username = userform.username.data
+            password = userform.password.data
+
+            logged_user = User.query.filter(User.email == email).first()
+            if logged_user and check_password_hash(logged_user.password, password):
+                login_user(logged_user)
+                flash('You have logged in', 'auth-success')
+                return redirect(url_for('site.home')) # Come back here later and redicrect to profile page
+            else:
+                flash('Your Email or Password is incorrecet', 'auth-failed')
+                return redirect(url_for('auth.signin'))
+            
+    except:
+        raise Exception('Invalid Form Data: Please Check Your Form')
+    return render_template('signin.html', form=userform)
+
+
+@auth.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('site.home'))
+
+
