@@ -1,0 +1,1 @@
+gunicorn 'my_inventory:app'

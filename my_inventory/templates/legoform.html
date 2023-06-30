@@ -1,0 +1,30 @@
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        <fieldset>
+            {{ form.name.label }}
+            {{ form.name(class='form-control', placeholder='Name') }}
+        </fieldset>
+        <fieldset>
+            {{ form.description.label }}
+            {{ form.description(class='form-control', placeholder='Description') }}
+        </fieldset>
+        <fieldset>
+            {{ form.price.label }}
+            {{ form.price(class='form-control', placeholder='Price') }}
+        </fieldset>
+        <fieldset>
+            {{ form.difficulty.label }}
+            {{ form.difficulty(class='form-control', placeholder='Difficulty') }}
+        </fieldset>
+        <fieldset>
+            {{ form.piece_count.label }}
+            {{ form.piece_count(class='form-control', placeholder='Piece Count') }}
+        </fieldset>
+        <fieldset>
+            {{ form.lego_category.label }}
+            {{ form.lego_category(class='form-control', placeholder='Lego Category') }}
+        </fieldset>
+        {{ form.submit_button(class='btn btn-primary btn-block mt-2') }}
+    </div>
+</form>
